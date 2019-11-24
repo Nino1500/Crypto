@@ -15,52 +15,51 @@ public class Cryptor {
 	*/	
 	public String cryptCesar(String inString, int key, int mode) {
 
-		inString=inString.toUpperCase();
+		inString=inString.toUpperCase(); //setting all letters to uppercase
 
-		String content= "";
+		String content= ""; //given content gets sorted out and filled in this var
 		StringBuilder special_chars= new StringBuilder();
 
 		for (int i = 0; i < inString.length(); i++) {
-
-			if(alphabet.contains(String.valueOf(inString.charAt(i)))){
-
+			if(alphabet.contains(String.valueOf(inString.charAt(i)))){ //checking if all characters are in the given alphabet
 				content+=(String.valueOf(inString.charAt(i)));
-
 			}
 			else {
-
-				special_chars.append(String.valueOf(inString.charAt(i)));
-
+				special_chars.append(String.valueOf(inString.charAt(i))); //sorting out the special characters
 			}
 		}
-
-		char[] encryptedString= new char[content.length()];
-
+		char[] final_content=content.toCharArray(); //empty array to fill output
 		switch (mode){
+			case 1: //decrypt
+				for (int i = 0; i < alphabet.length(); i++) { //going through the alphabet
+					for (int j = 0; j < content.length(); j++) { //going through the content
+						if(alphabet.charAt(i)==content.charAt(j)){ //matching index for the given alphabet
+							final_content[j]=alphabet.charAt((key+i)%29); //swapping with key and index
+						}
+					}
+				}
+				return String.valueOf(final_content)+special_chars; //returning final content
 
-			case 1:
-
-				return encryptCeaser(content, key)+special_chars;
-
-			case -1:
-
-
+			case -1: //decrypt /Problem: doesnt convert Ö for ex.
+				for (int i = 0; i < alphabet.length(); i++) {
+					for (int j = 0; j < content.length(); j++) {
+						if(alphabet.charAt(i)==content.charAt(j)){
+							if((i-key)<0){ //index could be negative
+								final_content[j]=alphabet.charAt(((i-key)*-1)%29); //going backwards in the alphabet /swapping
+							}
+							else{
+								final_content[j]=alphabet.charAt((i-key)%29);
+							}
+						}
+					}
+				}
+				return String.valueOf(final_content)+special_chars; //returning final content
 		}
 
 		return "";
 	}
 
-	public String encryptCeaser(String content, int key){
-		char[] final_content=content.toCharArray();
-		for (int i = 0; i < alphabet.length(); i++) {
-			for (int j = 0; j < content.length(); j++) {
-				if(alphabet.charAt(i)==content.charAt(j)){
-					final_content[j]=alphabet.charAt((key+i)%29);
-				}
-			}
-		}
-		return String.valueOf(final_content);
-	}
+
 
 
 	/** 
