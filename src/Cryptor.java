@@ -1,5 +1,7 @@
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 public class Cryptor {
 
@@ -12,7 +14,7 @@ public class Cryptor {
 	*  @param key:	The key use for en- or decryption
 	*  @param mode: Either 1 or -1. 1 selects eincryption and -1 selects decryption
 	*  @return The en- or dectypted text
-	*/	
+	*/
 	public String cryptCesar(String inString, int key, int mode) {
 
 		inString=inString.toUpperCase(); //setting all letters to uppercase
@@ -33,6 +35,7 @@ public class Cryptor {
 		StringBuilder final_content=new StringBuilder(); //A Stringbuilder for the final content
 
 		int position=0;
+
 		for (int i = 0; i < content.length(); i++) { //Looping through until the letter of content index is found in given alphabet
 			for (int j = 0; j < alphabet.length(); j++) {
 				if(content.charAt(i)==alphabet.charAt(j)){
@@ -55,8 +58,23 @@ public class Cryptor {
 	*  @param key:	The key use for en- or decryption
 	*  @param mode: Either 1 or -1. 1 selects eincryption and -1 selects decryption
 	*  @return The en- or dectypted text
-	*/	
+	*/
 	public String cryptVigenere(String inString, String key, int mode) {
+
+		inString=inString.toUpperCase();
+
+		StringBuilder special_chars= new StringBuilder();
+		String container= "";
+		for (int i = 0; i < inString.length(); i++) {
+			if(alphabet.contains(String.valueOf(inString.charAt(i)))){
+				container+=(inString.charAt(i));
+			}
+			else {
+				special_chars.append(inString.charAt(i));
+			}
+		}
+		inString=container;
+
 		int move=0;
 		int counter=0;
 		String newKey="";
@@ -71,20 +89,34 @@ public class Cryptor {
 			move++;
 		}
 
-		StringBuilder final_content=new StringBuilder();
+		StringBuilder final_content=new StringBuilder(); //final content
 
-		for (int i = 0; i < inString.length(); i++) {
-			if (mode == 1) { //encryption
-				final_content.append(Math.floorMod(inString.charAt(i) + newKey.charAt(i), 26) + 'A');
+		int first=0; //key value	-
+		int second=0; //letter value in alphabet
+
+		for (int i = 0; i < newKey.length(); i++) {
+			for (int j = 0; j < alphabet.length(); j++) {
+				if(newKey.charAt(i)==alphabet.charAt(j)){
+					first=j; //position of key in the alphabet
+				}
 			}
-			else if (mode == -1) { //decryption
-				final_content.append(Math.floorMod(inString.charAt(i) - newKey.charAt(i) + 26, 26)+ 'A');
+			for (int j = 0; j < alphabet.length(); j++) {
+				if(inString.charAt(i)==alphabet.charAt(j)){
+					second=j; //position of text in the alphabet
+				}
+			}
+			if(mode == 1){ //encrypt
+				final_content.append(alphabet.charAt(Math.floorMod(first+second, 29)));
+			}
+			else if(mode == -1){ //decrypt
+				final_content.append(alphabet.charAt(Math.floorMod(second-first, 29)));
 			}
 		}
 
-		return final_content.toString();
+		return final_content.toString()+special_chars.toString();
 
 	}
+
 	// ******************* Aufgabe 1 Ende *****************************************
 
 	// ******************* Aufgabe 2 Beginn *****************************************
