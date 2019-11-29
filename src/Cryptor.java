@@ -17,50 +17,37 @@ public class Cryptor {
 
 		inString=inString.toUpperCase(); //setting all letters to uppercase
 
-		String content= ""; //given content gets sorted out and filled in this var
-		StringBuilder special_chars= new StringBuilder();
+		String content= ""; //String for content (which is sorted from special characters
+
+		StringBuilder special_chars= new StringBuilder(); // Stringbuilder for special characters
 
 		for (int i = 0; i < inString.length(); i++) {
-			if(alphabet.contains(String.valueOf(inString.charAt(i)))){ //checking if all characters are in the given alphabet
+			if(alphabet.contains(String.valueOf(inString.charAt(i)))){
 				content+=(String.valueOf(inString.charAt(i)));
 			}
 			else {
-				special_chars.append(String.valueOf(inString.charAt(i))); //sorting out the special characters
+				special_chars.append(String.valueOf(inString.charAt(i)));
 			}
 		}
-		char[] final_content=content.toCharArray(); //empty array to fill output
-		switch (mode){
-			case 1: //decrypt
-				for (int i = 0; i < alphabet.length(); i++) { //going through the alphabet
-					for (int j = 0; j < content.length(); j++) { //going through the content
-						if(alphabet.charAt(i)==content.charAt(j)){ //matching index for the given alphabet
-							final_content[j]=alphabet.charAt((key+i)%29); //swapping with key and index
-						}
-					}
-				}
-				return String.valueOf(final_content)+special_chars; //returning final content
 
-			case -1: //decrypt /Problem: doesnt convert Ö for ex.
-				for (int i = 0; i < alphabet.length(); i++) {
-					for (int j = 0; j < content.length(); j++) {
-						if(alphabet.charAt(i)==content.charAt(j)){
-							if((i-key)<0){ //index could be negative
-								final_content[j]=alphabet.charAt(((i-key)*-1)%29); //going backwards in the alphabet /swapping
-							}
-							else{
-								final_content[j]=alphabet.charAt((i-key)%29);
-							}
-						}
-					}
+		StringBuilder final_content=new StringBuilder(); //A Stringbuilder for the final content
+
+		int position=0;
+		for (int i = 0; i < content.length(); i++) { //Looping through until the letter of content index is found in given alphabet
+			for (int j = 0; j < alphabet.length(); j++) {
+				if(content.charAt(i)==alphabet.charAt(j)){
+					position=j; //saving position for swapping/filling up in a row
 				}
-				return String.valueOf(final_content)+special_chars; //returning final content
+			}
+			if(mode == 1){
+				final_content.append(alphabet.charAt(Math.floorMod(position+key, 29))); //encryption
+			}
+			else if(mode == -1) {
+				final_content.append(alphabet.charAt(Math.floorMod(position-key, 29))); //decryption
+			}
 		}
-
-		return "";
+		return (final_content.toString())+special_chars.toString(); //returning final content with special chars at the end
 	}
-
-
-
 
 	/** 
 	*  En- or decrypts the given inString with the given key based on mode
@@ -70,10 +57,32 @@ public class Cryptor {
 	*  @return The en- or dectypted text
 	*/	
 	public String cryptVigenere(String inString, String key, int mode) {
-		StringBuilder translatedBuild = new StringBuilder();
-		
-		// TODO: implement vigenere cipher encryption and decryption
-		return translatedBuild.toString();
+		int move=0;
+		int counter=0;
+		String newKey="";
+
+		for (int i = 0; i < inString.length(); i++) { //first we have to make a new key, the key has to repeat until length of original text is the same length
+			if(move == key.length()){
+				counter=0;
+				move=0;
+			}
+			newKey = newKey + key.charAt(counter);
+			counter++;
+			move++;
+		}
+
+		StringBuilder final_content=new StringBuilder();
+
+		for (int i = 0; i < inString.length(); i++) {
+			if (mode == 1) { //encryption
+				final_content.append(Math.floorMod(inString.charAt(i) + newKey.charAt(i), 26) + 'A');
+			}
+			else if (mode == -1) { //decryption
+				final_content.append(Math.floorMod(inString.charAt(i) - newKey.charAt(i) + 26, 26)+ 'A');
+			}
+		}
+
+		return final_content.toString();
 
 	}
 	// ******************* Aufgabe 1 Ende *****************************************
@@ -86,8 +95,6 @@ public class Cryptor {
 	public String bruteForceCesar() {
 		String encryptedMessage = "SXT ITÄF XEF PÄÄTE, IPE STD UPÄÄ XEF. SXT ITÄF XEF SXT VTEPÖFWTXF STD FPFEPRWTÜ, ÜXRWF STD SXÜVT. SXT ITÄF XEF SGDRW SXT FPFEPRWTÜ QTEFXÖÖF GÜS SPSGDRW, SPEE TE PÄÄT FPFEPRWTÜ EXÜS. STÜÜ, SXT VTEPÖFWTXF STD FPFEPRWTÜ QTEFXÖÖF, IPE STD UPÄÄ XEF GÜS PGRW, IPE PÄÄTE ÜXRWF STD UPÄÄ XEF. SXT FPFEPRWTÜ XÖ ÄAVXERWTÜ DPGÖ EXÜS SXT ITÄF. SXT ITÄF LTDUMÄÄF XÜ FPFEPRWTÜ. TXÜTE ZPÜÜ STD UPÄÄ ETXÜ ASTD ÜXRWF STD UPÄÄ ETXÜ GÜS PÄÄTE OQDXVT VÄTXRW QÄTXQTÜ. IPE STD UPÄÄ XEF, SXT FPFEPRWT, XEF SPE QTEFTWTÜ HAÜ EPRWHTDWPÄFTÜ. STD EPRWHTDWPÄF XEF TXÜT HTDQXÜSGÜV HAÜ VTVTÜEFMÜSTÜ. (EPRWTÜ, SXÜVTÜ.) TE XEF STÖ SXÜV ITETÜFÄXRW, STD QTEFPÜSFTXÄ TXÜTE EPRWHTDWPÄFTE ETXÜ LG ZNÜÜTÜ. XÜ STD ÄAVXZ XEF ÜXRWFE LGUMÄÄXV: ITÜÜ SPE SXÜV XÖ EPRWHTDWPÄF HADZAÖÖTÜ ZPÜÜ, EA ÖGEE SXT ÖNVÄXRWZTXF STE EPRWHTDWPÄFTE XÖ SXÜV QTDTXFE BDMYGSXLXTDF ETXÜ.";
 		StringBuilder translatedBuild = new StringBuilder();
-		// TODO: implement brute force attack on cesar encrypted string
-
 		return translatedBuild.toString();
 	}
 
