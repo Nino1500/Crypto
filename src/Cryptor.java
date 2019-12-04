@@ -143,7 +143,7 @@ public class Cryptor {
 		int key=0;
 		char[] char_array=encryptedMessage.toCharArray();
 		HashMap<Character, Integer> map=new HashMap<>();
-		for (int i = 0; i < char_array.length; i++) {
+		for (int i = 0; i < char_array.length; i++) { //First, we fill in a hashmap for all frequencies and characters which appear in the encryptedmessage
 			if(alphabet.contains(String.valueOf(char_array[i]))){
 				if(map.containsKey(char_array[i])){
 					Integer value=map.get(char_array[i]);
@@ -156,25 +156,23 @@ public class Cryptor {
 		}
 		Map.Entry<Character, Integer> maxEntry=null;
 		Map.Entry<Character, Integer> secondMaxEntry=null;
-		int counter=0;
-		for(Map.Entry<Character, Integer> entry : map.entrySet()){
-			counter++;
+		for(Map.Entry<Character, Integer> entry : map.entrySet()){ //Now we search for the two highest ones (which are X and Ö in this message)
 			if(maxEntry == null || entry.getValue().compareTo(maxEntry.getValue())>0){
 				secondMaxEntry=maxEntry;
 				maxEntry=entry;
 			}
 		}
 		int pos1 = 0, pos2=0;
-		for (int i = 0; i < alphabet.length(); i++) {
+		for (int i = 0; i < alphabet.length(); i++) { //now we search for the distance, therefore we take position when found from highest
 			if(maxEntry.getKey().equals(alphabet.charAt(i))){
 				pos1=i;
 			}
-			if(secondMaxEntry.getKey().equals(alphabet.charAt(i))){
+			if(secondMaxEntry.getKey().equals(alphabet.charAt(i))){ //and for second highest
 				pos2=i;
 			}
 		}
-		key=pos1-pos2;
-		if(key<0) key=key*-1;
+		key=pos1-pos2; //key is the difference from the two highest ones in frequency
+		if(key<0) key=key*-1; //its possible to get negative figure so we make sure its positive! //in this example its the distance of 4, which appears with logic ... but in the bruteforce I found 19 ..
 		return key;
 	}
 
