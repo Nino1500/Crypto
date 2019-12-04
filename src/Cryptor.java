@@ -2,6 +2,7 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Cryptor {
 
@@ -127,6 +128,9 @@ public class Cryptor {
 	public String bruteForceCesar() {
 		String encryptedMessage = "SXT ITÄF XEF PÄÄTE, IPE STD UPÄÄ XEF. SXT ITÄF XEF SXT VTEPÖFWTXF STD FPFEPRWTÜ, ÜXRWF STD SXÜVT. SXT ITÄF XEF SGDRW SXT FPFEPRWTÜ QTEFXÖÖF GÜS SPSGDRW, SPEE TE PÄÄT FPFEPRWTÜ EXÜS. STÜÜ, SXT VTEPÖFWTXF STD FPFEPRWTÜ QTEFXÖÖF, IPE STD UPÄÄ XEF GÜS PGRW, IPE PÄÄTE ÜXRWF STD UPÄÄ XEF. SXT FPFEPRWTÜ XÖ ÄAVXERWTÜ DPGÖ EXÜS SXT ITÄF. SXT ITÄF LTDUMÄÄF XÜ FPFEPRWTÜ. TXÜTE ZPÜÜ STD UPÄÄ ETXÜ ASTD ÜXRWF STD UPÄÄ ETXÜ GÜS PÄÄTE OQDXVT VÄTXRW QÄTXQTÜ. IPE STD UPÄÄ XEF, SXT FPFEPRWT, XEF SPE QTEFTWTÜ HAÜ EPRWHTDWPÄFTÜ. STD EPRWHTDWPÄF XEF TXÜT HTDQXÜSGÜV HAÜ VTVTÜEFMÜSTÜ. (EPRWTÜ, SXÜVTÜ.) TE XEF STÖ SXÜV ITETÜFÄXRW, STD QTEFPÜSFTXÄ TXÜTE EPRWHTDWPÄFTE ETXÜ LG ZNÜÜTÜ. XÜ STD ÄAVXZ XEF ÜXRWFE LGUMÄÄXV: ITÜÜ SPE SXÜV XÖ EPRWHTDWPÄF HADZAÖÖTÜ ZPÜÜ, EA ÖGEE SXT ÖNVÄXRWZTXF STE EPRWHTDWPÄFTE XÖ SXÜV QTDTXFE BDMYGSXLXTDF ETXÜ.";
 		StringBuilder translatedBuild = new StringBuilder();
+		for (int i = 0; i < 29; i++) {
+			translatedBuild.append("Key: "+i+" "+" Message: "+cryptCesar(encryptedMessage,i,-1)+"\n");
+		}
 		return translatedBuild.toString();
 	}
 
@@ -136,8 +140,41 @@ public class Cryptor {
 	*/	
 	public int letterfreqCesar() {
 		String encryptedMessage ="WÖX MXBJ ÖIJ TBBXI, MTI WXH YTBB ÖIJ. WÖX MXBJ ÖIJ WÖX ZXITCJÄXÖJ WXH JTJITVÄXD, DÖVÄJ WXH WÖDZX. WÖX MXBJ ÖIJ WKHVÄ WÖX JTJITVÄXD UXIJÖCCJ KDW WTWKHVÄ, WTII XI TBBX JTJITVÄXD IÖDW. WXDD, WÖX ZXITCJÄXÖJ WXH JTJITVÄXD UXIJÖCCJ, MTI WXH YTBB ÖIJ KDW TKVÄ, MTI TBBXI DÖVÄJ WXH YTBB ÖIJ. WÖX JTJITVÄXD ÖC BEZÖIVÄXD HTKC IÖDW WÖX MXBJ. WÖX MXBJ PXHYQBBJ ÖD JTJITVÄXD. XÖDXI ATDD WXH YTBB IXÖD EWXH DÖVÄJ WXH YTBB IXÖD KDW TBBXI SUHÖZX ZBXÖVÄ UBXÖUXD. MTI WXH YTBB ÖIJ, WÖX JTJITVÄX, ÖIJ WTI UXIJXÄXD LED ITVÄLXHÄTBJXD. WXH ITVÄLXHÄTBJ ÖIJ XÖDX LXHUÖDWKDZ LED ZXZXDIJQDWXD. (ITVÄXD, WÖDZXD.) XI ÖIJ WXC WÖDZ MXIXDJBÖVÄ, WXH UXIJTDWJXÖB XÖDXI ITVÄLXHÄTBJXI IXÖD PK ARDDXD. ÖD WXH BEZÖA ÖIJ DÖVÄJI PKYQBBÖZ: MXDD WTI WÖDZ ÖC ITVÄLXHÄTBJ LEHAECCXD ATDD, IE CKII WÖX CRZBÖVÄAXÖJ WXI ITVÄLXHÄTBJXI ÖC WÖDZ UXHXÖJI FHQÜKWÖPÖXHJ IXÖD.";
-		int key = 0;
-		// TODO: find the key used for encryption using the letterfrequency method
+		int key=0;
+		char[] char_array=encryptedMessage.toCharArray();
+		HashMap<Character, Integer> map=new HashMap<>();
+		for (int i = 0; i < char_array.length; i++) {
+			if(alphabet.contains(String.valueOf(char_array[i]))){
+				if(map.containsKey(char_array[i])){
+					Integer value=map.get(char_array[i]);
+					map.replace(char_array[i], value, value+1);
+				}
+				else{
+					map.put(char_array[i], 1);
+				}
+			}
+		}
+		Map.Entry<Character, Integer> maxEntry=null;
+		Map.Entry<Character, Integer> secondMaxEntry=null;
+		int counter=0;
+		for(Map.Entry<Character, Integer> entry : map.entrySet()){
+			counter++;
+			if(maxEntry == null || entry.getValue().compareTo(maxEntry.getValue())>0){
+				secondMaxEntry=maxEntry;
+				maxEntry=entry;
+			}
+		}
+		int pos1 = 0, pos2=0;
+		for (int i = 0; i < alphabet.length(); i++) {
+			if(maxEntry.getKey().equals(alphabet.charAt(i))){
+				pos1=i;
+			}
+			if(secondMaxEntry.getKey().equals(alphabet.charAt(i))){
+				pos2=i;
+			}
+		}
+		key=pos1-pos2;
+		if(key<0) key=key*-1;
 		return key;
 	}
 
