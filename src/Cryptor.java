@@ -139,7 +139,7 @@ public class Cryptor {
 	*  @return The key used for encryption
 	*/	
 	public int letterfreqCesar() {
-		String encryptedMessage ="WÖX MXBJ ÖIJ TBBXI, MTI WXH YTBB ÖIJ. WÖX MXBJ ÖIJ WÖX ZXITCJÄXÖJ WXH JTJITVÄXD, DÖVÄJ WXH WÖDZX. WÖX MXBJ ÖIJ WKHVÄ WÖX JTJITVÄXD UXIJÖCCJ KDW WTWKHVÄ, WTII XI TBBX JTJITVÄXD IÖDW. WXDD, WÖX ZXITCJÄXÖJ WXH JTJITVÄXD UXIJÖCCJ, MTI WXH YTBB ÖIJ KDW TKVÄ, MTI TBBXI DÖVÄJ WXH YTBB ÖIJ. WÖX JTJITVÄXD ÖC BEZÖIVÄXD HTKC IÖDW WÖX MXBJ. WÖX MXBJ PXHYQBBJ ÖD JTJITVÄXD. XÖDXI ATDD WXH YTBB IXÖD EWXH DÖVÄJ WXH YTBB IXÖD KDW TBBXI SUHÖZX ZBXÖVÄ UBXÖUXD. MTI WXH YTBB ÖIJ, WÖX JTJITVÄX, ÖIJ WTI UXIJXÄXD LED ITVÄLXHÄTBJXD. WXH ITVÄLXHÄTBJ ÖIJ XÖDX LXHUÖDWKDZ LED ZXZXDIJQDWXD. (ITVÄXD, WÖDZXD.) XI ÖIJ WXC WÖDZ MXIXDJBÖVÄ, WXH UXIJTDWJXÖB XÖDXI ITVÄLXHÄTBJXI IXÖD PK ARDDXD. ÖD WXH BEZÖA ÖIJ DÖVÄJI PKYQBBÖZ: MXDD WTI WÖDZ ÖC ITVÄLXHÄTBJ LEHAECCXD ATDD, IE CKII WÖX CRZBÖVÄAXÖJ WXI ITVÄLXHÄTBJXI ÖC WÖDZ UXHXÖJI FHQÜKWÖPÖXHJ IXÖD.";
+		String encryptedMessage = "SXT ITÄF XEF PÄÄTE, IPE STD UPÄÄ XEF. SXT ITÄF XEF SXT VTEPÖFWTXF STD FPFEPRWTÜ, ÜXRWF STD SXÜVT. SXT ITÄF XEF SGDRW SXT FPFEPRWTÜ QTEFXÖÖF GÜS SPSGDRW, SPEE TE PÄÄT FPFEPRWTÜ EXÜS. STÜÜ, SXT VTEPÖFWTXF STD FPFEPRWTÜ QTEFXÖÖF, IPE STD UPÄÄ XEF GÜS PGRW, IPE PÄÄTE ÜXRWF STD UPÄÄ XEF. SXT FPFEPRWTÜ XÖ ÄAVXERWTÜ DPGÖ EXÜS SXT ITÄF. SXT ITÄF LTDUMÄÄF XÜ FPFEPRWTÜ. TXÜTE ZPÜÜ STD UPÄÄ ETXÜ ASTD ÜXRWF STD UPÄÄ ETXÜ GÜS PÄÄTE OQDXVT VÄTXRW QÄTXQTÜ. IPE STD UPÄÄ XEF, SXT FPFEPRWT, XEF SPE QTEFTWTÜ HAÜ EPRWHTDWPÄFTÜ. STD EPRWHTDWPÄF XEF TXÜT HTDQXÜSGÜV HAÜ VTVTÜEFMÜSTÜ. (EPRWTÜ, SXÜVTÜ.) TE XEF STÖ SXÜV ITETÜFÄXRW, STD QTEFPÜSFTXÄ TXÜTE EPRWHTDWPÄFTE ETXÜ LG ZNÜÜTÜ. XÜ STD ÄAVXZ XEF ÜXRWFE LGUMÄÄXV: ITÜÜ SPE SXÜV XÖ EPRWHTDWPÄF HADZAÖÖTÜ ZPÜÜ, EA ÖGEE SXT ÖNVÄXRWZTXF STE EPRWHTDWPÄFTE XÖ SXÜV QTDTXFE BDMYGSXLXTDF ETXÜ.";
 		int key=0;
 		char[] char_array=encryptedMessage.toCharArray();
 		HashMap<Character, Integer> map=new HashMap<>();
@@ -155,10 +155,8 @@ public class Cryptor {
 			}
 		}
 		Map.Entry<Character, Integer> maxEntry=null;
-		Map.Entry<Character, Integer> secondMaxEntry=null;
 		for(Map.Entry<Character, Integer> entry : map.entrySet()){ //Now we search for the two highest ones (which are X and Ö in this message)
 			if(maxEntry == null || entry.getValue().compareTo(maxEntry.getValue())>0){
-				secondMaxEntry=maxEntry;
 				maxEntry=entry;
 			}
 		}
@@ -167,12 +165,12 @@ public class Cryptor {
 			if(maxEntry.getKey().equals(alphabet.charAt(i))){
 				pos1=i;
 			}
-			if(secondMaxEntry.getKey().equals(alphabet.charAt(i))){ //and for second highest
+			if('E' == (alphabet.charAt(i))){ //and for the E which is the most common in the german alphabet
 				pos2=i;
 			}
 		}
 		key=pos1-pos2; //key is the difference from the two highest ones in frequency
-		if(key<0) key=key*-1; //its possible to get negative figure so we make sure its positive! //in this example its the distance of 4, which appears with logic ... but in the bruteforce I found 19 ..
+		if(key<0) key=key*-1;
 		return key;
 	}
 
@@ -182,11 +180,26 @@ public class Cryptor {
 	*/	
 	public String knownPlaintextVigenere() {
 		String encrypted = "IVHI ZVEÖBJV XNCVN EDU ÖRHFEE, GIY ÄRBYÄ VS ÄKB ÄRITHUSYH XRD 'LÄUFEWUURRYÄ TOXR' WÜR UEI LZGYÄXFE PEUE NKTH TXBAEÄJ WÜBW MÜDJVLJ 'ÖNFGD PCNÖBTYHJ' UÄZFIZS HAKCQTHCVVY QE SRYPÄVN. ZFAKEBZEIR. EÜÄXF UÄIHECYKBG OXZ XRH NJN CDYB RBYB UED RGTYBHVIWUITHYÄ GHHTWEW CJVHK DIN ÄÖTHK CVHI ÖA NRZV. GÖV JVX SYUXB ÜCJ NÜPÄHS EDSRYPÄSAI. GEÜRD SÜR RCÖDIRM GXÜCÖR UAKRD SÜR KIY ZVSÜPÄVRK MCHÜÄ QBYBJFAÄRD. XRDB 'ÄKF NRÖÜ ÜPÄ PUBTBOÜQ SIE. YEÜCIH XNI NÜPÄH XNIG ÜPÄ NÜPÄH MRHWOCTJ WYBWV' (PI ÖLHVN NKTH VC SFÄZ VFÄ BIIFTBA - HEIBÖHOIVTÜ GVIGIETI - UJHPJ://WNG.MOLDKSE.PEA/NNJTH?F=SM6VP-I5ÖCE - TS 1:26). ÖB XVXGED IZNER KÜECVYE FÖVL CFRSJ CZT QXF BBODTFTHRPÖVX UEQ UED UFEWUXB MÖD CFQXG. ZÖH ZBXINXYÖTHYÄ XRTCIVN NDCNPZEI";
-		String opener = "Sehr geehrte Damen und Herren";
-		String end = "Mit freundlichen Grüssen Anonymous";
-		String key = "";
-		// TODO: find the key used for encryption using a known plaintext attack
-		return key;
+		String opener = "Sehr geehrte Damen und Herren".toUpperCase();
+		String end = "Mit freundlichen Grüssen Anonymous"; //not needed
+		StringBuilder key = new StringBuilder();
+		String[] needed_String_one=encrypted.split(",");
+		String needed_string=needed_String_one[0];
+		char[] needed_char_array=needed_string.toCharArray();
+		for (int i = 0; i < needed_char_array.length; i++) {
+			int pos1=0, pos2=0;
+			for (int j = 0; j < alphabet.length(); j++) {
+				if(needed_char_array[i] == alphabet.charAt(j)){
+					pos1=j;
+				}
+				if(opener.charAt(i) == alphabet.charAt(j)){
+					pos2=j;
+				}
+			}
+			int position=(pos1-pos2+29)%29;
+			key.append(String.valueOf(alphabet.charAt(position)));
+		}
+		return key.toString();
 	}
 	// ******************* Aufgabe 2 Ende *****************************************
 
