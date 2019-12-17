@@ -1,3 +1,6 @@
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+
+import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -206,41 +209,60 @@ public class Cryptor {
 
 
 	// ******************* Aufgabe 3 Beginn *****************************************
-	public String hash(String hasher, String input) {
+	public String hash(String hasher, String input){
 		String hashString = "";
-		MessageDigest digest;
+		byte mdByteData[]=null;
+		MessageDigest digest = null;
 		switch(hasher) {
 			case "MD5":
 				try {
 					digest = MessageDigest.getInstance("MD5");
 				} catch (NoSuchAlgorithmException e) {
-					System.err.println("No such Algorithm");
+					System.err.println("No such Algorithm - 1");
 				}
 				break;
 			case "SHA":
-				// TODO: get Instance of MessageDigest with SHA Algorithm
+				try {
+					digest = MessageDigest.getInstance("SHA");
+				} catch (NoSuchAlgorithmException e) {
+					System.err.println("No such Algorithm - 2");
+				}
 				break;
 			case "SHA256":
-				// TODO: get Instance of MessageDigest with SHA-256 Algorithm
+				try {
+					digest = MessageDigest.getInstance("SHA-256");
+				} catch (NoSuchAlgorithmException e) {
+					System.err.println("No such Algorithm - 3");
+				}
 				break;
 			case "SHA512":
-				// TODO: get Instance of MessageDigest with SHA-512 Algorithm
+				try {
+					digest = MessageDigest.getInstance("SHA-512");
+				} catch (NoSuchAlgorithmException e) {
+					System.err.println("No such Algorithm - 4");
+				}
 				break;
 			case "SHA3":
-				// TODO: get Instance of MessageDigest with SHA3-512 Algorithm
+				try {
+					digest = MessageDigest.getInstance("SHA3-512");
+				} catch (NoSuchAlgorithmException e) {
+					System.err.println("No such Algorithm - 5");
+				}
 				break;
 		}
-		// TODO: implement digest generation
-		
-		//TODO: byte mdByteData[] = 
-				
-		//hashString = byteArrayToHexString(mdByteData);
+		if (digest != null) {
+			mdByteData=digest.digest(input.getBytes(StandardCharsets.UTF_8));
+		}
+		if (mdByteData != null) {
+			hashString = byteArrayToHexString(mdByteData);
+		}
 		return hashString;
 	}
 	
 	public boolean areEqual(String first, String second) {
-		// TODO: compare if two strings are equal
-		return false;
+		String enc=hash("MD5",first);
+		String enc2=hash("MD5",second);
+		return enc.equals(enc2);
 	}
 	// ******************* Aufgabe 3 Ende *****************************************
 	
